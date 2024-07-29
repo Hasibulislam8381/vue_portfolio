@@ -35,7 +35,7 @@
                             >Freelance Full-Stack Web developer</P
                         >
                         <hr class="mb-8 opacity-90 dark:opacity-5" />
-                        <p class="mb-8">
+                        <p class="mb-8 text-white">
                             Lorem ipsum dolor sit amet consectetur adipisicing
                             elit tempore earum dolorum quo consequatur rem nihil
                             hic ducimus rerum soluta neque harum velit molestiae
