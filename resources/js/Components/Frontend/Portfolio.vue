@@ -10,7 +10,7 @@ defineProps({
 <template>
     <section
         id="portfolio"
-        class="section bg-light-primary dark:bg-dark-primary min-h-[1400px]"
+        class="section bg-light-primary dark:bg-dark-primary"
     >
         <div class="container mx-auto">
             <div class="flex flex-col items-center text-center">
