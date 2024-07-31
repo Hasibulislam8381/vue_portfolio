@@ -4,27 +4,27 @@ import { useForm } from "@inertiajs/inertia-vue3";
 
 const showMessage = ref(false);
 
-function setShowMessage(value) {
-    showMessage.value = value;
-}
-function clearShowMessage() {
-    form.reset;
-    setShowMessage(true);
-    setTimeout(() => setShowMessage(false), 2000);
-}
-
 const form = useForm({
     name: "",
     email: "",
     body: "",
 });
+
+function setShowMessage(value) {
+    showMessage.value = value;
+}
+
+function cleanForm() {
+    form.reset();
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 15000);
+}
+
 const submit = () => {
-    form.post(
-        route("contact", {
-            preserveScroll: true,
-            onSuccess: () => clearShowMessage(),
-        })
-    );
+    form.post(route("contact"), {
+        preserveScroll: true,
+        onSuccess: () => cleanForm(),
+    });
 };
 </script>
 <template>
@@ -76,10 +76,10 @@ const submit = () => {
                             <h4 class="font-body text-xl mb-1">
                                 Have a question?
                             </h4>
-                            <P class="mb-1 text-light-tail-100"
+                            <P class="mb-1 text-paragraph"
                                 >I am here to help you.</P
                             >
-                            <p class="text-lig ht-tail-100 font-semibold">
+                            <p class="text-accent font-normal">
                                 Email me at john@doe.com
                             </p>
                         </div>
@@ -112,10 +112,8 @@ const submit = () => {
                             <h4 class="font-body text-xl mb-1">
                                 Current Location
                             </h4>
-                            <P class="mb-1 text-light-tail-100"
-                                >Tirana, Albania.</P
-                            >
-                            <p class="text-light-tail-100 font-semibold">
+                            <P class="mb-1 text-paragraph">Tirana, Albania.</P>
+                            <p class="text-accent font-normal">
                                 Serving clients worldwide.
                             </p>
                         </div>
@@ -125,12 +123,6 @@ const submit = () => {
                     @submit.prevent="submit"
                     class="space-y-8 w-full max-w-md"
                 >
-                    <div
-                        v-if="showMessage"
-                        class="m-2 p-4 bg-light-tail-500 dark:bg-dark-navy-100 text-light-secondary rounded-lg"
-                    >
-                        Thank You for Contacting me
-                    </div>
                     <div
                         v-if="showMessage"
                         class="m-2 p-4 bg-light-tail-500 dark:bg-dark-navy-100 text-light-secondary rounded-lg"
@@ -176,6 +168,7 @@ const submit = () => {
                         class="text-sm m-2 text-red-400"
                         >{{ form.errors.body }}</span
                     >
+
                     <button
                         class="btn btn-lg bg-accent hover:bg-secondary text-white"
                     >
