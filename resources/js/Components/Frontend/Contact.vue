@@ -1,4 +1,32 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import { useForm } from "@inertiajs/inertia-vue3";
+
+const showMessage = ref(false);
+
+function setShowMessage(value) {
+    showMessage.value = value;
+}
+function clearShowMessage() {
+    form.reset;
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 2000);
+}
+
+const form = useForm({
+    name: "",
+    email: "",
+    body: "",
+});
+const submit = () => {
+    form.post(
+        route("contact", {
+            preserveScroll: true,
+            onSuccess: () => clearShowMessage(),
+        })
+    );
+};
+</script>
 <template>
     <section id="contact" class="section bg-light-primary dark:bg-dark-primary">
         <div
@@ -51,7 +79,7 @@
                             <P class="mb-1 text-light-tail-100"
                                 >I am here to help you.</P
                             >
-                            <p class="text-light-tail-100 font-semibold">
+                            <p class="text-lig ht-tail-100 font-semibold">
                                 Email me at john@doe.com
                             </p>
                         </div>
@@ -93,7 +121,16 @@
                         </div>
                     </div>
                 </div>
-                <form class="space-y-8 w-full max-w-md">
+                <form
+                    @submit.prevent="submit"
+                    class="space-y-8 w-full max-w-md"
+                >
+                    <div
+                        v-if="showMessage"
+                        class="m-2 p-4 bg-light-tail-500 dark:bg-dark-navy-100 text-light-secondary rounded-lg"
+                    >
+                        Thank You for Contacting me
+                    </div>
                     <div
                         v-if="showMessage"
                         class="m-2 p-4 bg-light-tail-500 dark:bg-dark-navy-100 text-light-secondary rounded-lg"
@@ -103,25 +140,42 @@
                     <div class="flex gap-8">
                         <div>
                             <input
+                                v-model="form.name"
                                 type="text"
                                 class="input"
                                 placeholder="Your Name"
                             />
+                            <span
+                                v-if="form.errors.name"
+                                class="text-sm m-2 text-red-400"
+                                >{{ form.errors.name }}</span
+                            >
                         </div>
                         <div>
                             <input
+                                v-model="form.email"
                                 type="email"
                                 class="input"
                                 placeholder="Your Email"
                             />
+                            <span
+                                v-if="form.errors.email"
+                                class="text-sm m-2 text-red-400"
+                                >{{ form.errors.email }}</span
+                            >
                         </div>
                     </div>
                     <textarea
+                        v-model="form.body"
                         class="textarea"
                         placeholder="Your Meassage"
                         spellcheck="false"
                     ></textarea>
-
+                    <span
+                        v-if="form.errors.body"
+                        class="text-sm m-2 text-red-400"
+                        >{{ form.errors.body }}</span
+                    >
                     <button
                         class="btn btn-lg bg-accent hover:bg-secondary text-white"
                     >
