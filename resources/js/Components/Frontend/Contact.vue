@@ -1,32 +1,51 @@
-<script setup>
-import { ref } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+<script>
+export default {
+    data() {
+        return {
+            form: {
+                name: "",
+                email: "",
+                body: "",
+                errors: {},
+            },
+            showMessage: false,
+            isSubmitting: false,
+        };
+    },
+    methods: {
+        async handleSubmit() {
+            const route = this.route("contact"); // Assuming this.route is defined
+            await this.submit(route);
+        },
+        async submit(route) {
+            this.isSubmitting = true;
+            this.form.errors = {};
 
-const showMessage = ref(false);
+            try {
+                // Perform form submission logic here (e.g., API call)
+                await axios.post(route, this.form);
 
-const form = useForm({
-    name: "",
-    email: "",
-    body: "",
-});
-
-function setShowMessage(value) {
-    showMessage.value = value;
-}
-
-function cleanForm() {
-    form.reset();
-    setShowMessage(true);
-    setTimeout(() => setShowMessage(false), 15000);
-}
-
-const submit = () => {
-    form.post(route("contact"), {
-        preserveScroll: true,
-        onSuccess: () => cleanForm(),
-    });
+                // On success:
+                this.showMessage = true;
+                this.form.name = "";
+                this.form.email = "";
+                this.form.body = "";
+                setTimeout(() => {
+                    this.showMessage = false;
+                }, 3000);
+            } catch (error) {
+                // Handle errors and update form.errors if needed
+                if (error.response && error.response.data.errors) {
+                    this.form.errors = error.response.data.errors;
+                }
+            } finally {
+                this.isSubmitting = false;
+            }
+        },
+    },
 };
 </script>
+
 <template>
     <section id="contact" class="section bg-light-primary dark:bg-dark-primary">
         <div
@@ -76,11 +95,11 @@ const submit = () => {
                             <h4 class="font-body text-xl mb-1">
                                 Have a question?
                             </h4>
-                            <P class="mb-1 text-paragraph"
+                            <P class="mb-1 text-white"
                                 >I am here to help you.</P
                             >
                             <p class="text-accent font-normal">
-                                Email me at john@doe.com
+                                Email me at hasibulislam8381@gmail.com
                             </p>
                         </div>
                     </div>
@@ -112,7 +131,7 @@ const submit = () => {
                             <h4 class="font-body text-xl mb-1">
                                 Current Location
                             </h4>
-                            <P class="mb-1 text-paragraph">Tirana, Albania.</P>
+                            <P class="mb-1 text-white">Tirana, Albania.</P>
                             <p class="text-accent font-normal">
                                 Serving clients worldwide.
                             </p>
@@ -120,7 +139,7 @@ const submit = () => {
                     </div>
                 </div>
                 <form
-                    @submit.prevent="submit"
+                    @submit.prevent="handleSubmit"
                     class="space-y-8 w-full max-w-md"
                 >
                     <div
@@ -160,7 +179,7 @@ const submit = () => {
                     <textarea
                         v-model="form.body"
                         class="textarea"
-                        placeholder="Your Meassage"
+                        placeholder="Your Message"
                         spellcheck="false"
                     ></textarea>
                     <span
@@ -171,11 +190,71 @@ const submit = () => {
 
                     <button
                         class="btn btn-lg bg-accent hover:bg-secondary text-white"
+                        :disabled="isSubmitting"
                     >
                         Send message
                     </button>
                 </form>
+                <div v-if="isSubmitting" class="loader-container">
+                    <div class="loader"></div>
+                </div>
             </div>
         </div>
     </section>
 </template>
+<style scoped>
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background: rgba(255, 255, 255, 0.8);  */
+    z-index: 999; /* Ensure it's above other content */
+}
+
+.loader {
+    width: 40px;
+    height: 40px;
+    color: #ffffff;
+    background: conic-gradient(
+            from -45deg at top 20px left 50%,
+            #0000,
+            currentColor 1deg 90deg,
+            #f0f0f000 91deg
+        ),
+        conic-gradient(
+            from 45deg at right 20px top 50%,
+            #0000,
+            currentColor 1deg 90deg,
+            #0000 91deg
+        ),
+        conic-gradient(
+            from 135deg at bottom 20px left 50%,
+            #0000,
+            currentColor 1deg 90deg,
+            #0000 91deg
+        ),
+        conic-gradient(
+            from -135deg at left 20px top 50%,
+            #0000,
+            currentColor 1deg 90deg,
+            #0000 91deg
+        );
+    animation: l4 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+}
+
+@keyframes l4 {
+    50% {
+        width: 60px;
+        height: 60px;
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+</style>

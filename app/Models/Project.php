@@ -14,4 +14,8 @@ class Project extends Model
     {
         return $this->belongsTo(Skill::class);
     }
+    public function AllSkill()
+    {
+        return $this->belongsTo(Skill::class);
+    }
 }

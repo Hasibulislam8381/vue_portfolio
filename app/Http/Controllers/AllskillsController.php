@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SkillResource;
+use App\Http\Resources\AllSkillResource;
+use App\Models\AllSkill;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\Skill;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
-class SkillController extends Controller
+class AllskillsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-        $skills = SkillResource::collection(Skill::all());
-        return Inertia::render('Skills/Index',compact('skills'));
+        $AllSkill = AllSkillResource::collection(AllSkill::all());
+        
+        return Inertia::render('AllSkill/Index',compact('AllSkill'));
     }
 
     /**
@@ -29,8 +27,7 @@ class SkillController extends Controller
     public function create()
     {
         //
-       
-        return Inertia::render('Skills/Create');
+        return Inertia::render('AllSkill/Create');
     }
 
     /**
@@ -47,16 +44,16 @@ class SkillController extends Controller
         {
             $image = $request->file('image')->store('skills');
 
-            Skill::create([
+            AllSkill::create([
                 'name'=>$request->name,
                 'image'=>$image
             ]);
-            return Redirect::route('skills.index')->with('message','Category Created Successfully');
+            return Redirect::route('all-skills.index')->with('message','Skill Created Successfully');
         }
         return Redirect::back();
     }
 
-      /**
+    /**
      * Display the specified resource.
      */
     public function show(string $id)
@@ -67,43 +64,41 @@ class SkillController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Skill $skill)
+    public function edit(AllSkill $AllSkill)
     {
-        //
-        return Inertia::render("Skills/Edit",compact('skill'));
+        return Inertia::render("AllSkill/Edit",compact('AllSkill'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Skill $skill)
+    public function update(Request $request, AllSkill $AllSkill)
     {
-        //
-        $image = $skill->image;
+        $image = $AllSkill->image;
         $request->validate([
             'name'=>['required','min:3']
         ]);
         if($request->hasFile('image')){
-            Storage::delete($skill->image);
+            Storage::delete($AllSkill->image);
             $image=$request->file('image')->store('skills');
         }
-        $skill->update([
+        $AllSkill->update([
             'name'=>$request->name,
             'image'=>$image
         ]);
 
-        return Redirect::route('skills.index')->with('message','Category Updated Successfully');
+        return Redirect::route('all-skills.index')->with('message','Skill Updated Successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Skill $skill)
+    public function destroy(AllSkill $AllSkill)
     {
-      
-        Storage::delete($skill->image);
-        $skill->delete();
+        
+        Storage::delete($AllSkill->image);
+        $AllSkill->delete();
 
-        return Redirect::back()->with('message','Category Deleted Successfully');
+        return Redirect::back()->with('message','Skill Deleted Successfully');
     }
 }

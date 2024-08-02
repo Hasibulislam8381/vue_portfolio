@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AllskillsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -36,6 +37,7 @@ Route::middleware('auth','verified')->group(function () {
     })->name('dashboard');
     Route::resource('/skills',SkillController::class);
     Route::resource('/projects',ProjectController::class);
+    Route::resource('/all-skills',AllskillsController::class);
 });
 
 require __DIR__.'/auth.php';

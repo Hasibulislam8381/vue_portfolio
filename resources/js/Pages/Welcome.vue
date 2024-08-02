@@ -11,6 +11,7 @@ import Services from "@/Components/Frontend/Services.vue";
 import Contact from "@/Components/Frontend/Contact.vue";
 
 defineProps({
+    AllSkill: Object,
     skills: Object,
     projects: Object,
 });
@@ -26,7 +27,7 @@ defineProps({
         <!-- About Section  secondary-->
         <About />
         <!-- Skills section tail-100 -->
-        <Skills :skills="skills" />
+        <Skills :AllSkill="AllSkill" />
         <!-- Porfolio Section Primary -->
         <Portfolio :skills="skills" :projects="projects" />
         <!-- Services Section Secondary -->

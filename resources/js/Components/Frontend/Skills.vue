@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-    skills: Object,
+    AllSkill: Object,
 });
 </script>
 <template>
@@ -9,7 +9,7 @@ defineProps({
             <div class="grid grid-cols-8 md:grid-flow-col">
                 <div
                     class="flex items-center justify-center"
-                    v-for="skill in skills.data"
+                    v-for="skill in AllSkill.data"
                     :key="skill.id"
                 >
                     <img :src="skill.image" :alt="skill.name" class="lg:h-20" />

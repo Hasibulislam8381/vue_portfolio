@@ -48,13 +48,21 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('skills.index')"
                                     :active="route().current('skills.index')"
                                 >
-                                    SKills
+                                    Category
                                 </NavLink>
                                 <NavLink
                                     :href="route('projects.index')"
                                     :active="route().current('projects.index')"
                                 >
                                     Projects
+                                </NavLink>
+                                <NavLink
+                                    :href="route('all-skills.index')"
+                                    :active="
+                                        route().current('all-skills.index')
+                                    "
+                                >
+                                    Skills
                                 </NavLink>
                             </div>
                         </div>
